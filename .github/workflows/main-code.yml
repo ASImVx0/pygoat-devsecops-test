@@ -1,25 +1,26 @@
-name: CodeTest
+name: CI
 
 on: [push]
 
-jobs:
+
+jobs: 
   sast_scan:
-    name: Bandit Scan
+    name: Run Bandit Scan
     runs-on: ubuntu-latest
 
     steps:
-    - name: CheckOut Code
+    - name: Checkout Code
       uses: actions/checkout@v2
 
-    - name: SetUp Python3
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
 
-    - name: Install Bandit Scan
+    - name: Install Bandit
       run: pip install bandit
 
-    - name: RUn Bandit Scan
+    - name: Run bandit Scan
       run: bandit -ll -ii -r . -f json -o bandit-report.json
 
     - name: Upload Artifact
@@ -28,7 +29,3 @@ jobs:
       with:
         name: bandit-findings
         path: bandit-report.json
- 
-      
-
-    
