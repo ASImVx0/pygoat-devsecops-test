@@ -1,0 +1,34 @@
+name: CodeTest
+
+on: [push]
+
+jobs:
+  sast_scan:
+    name: Bandit Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: CheckOut Code
+      uses: actions/checkout@v2
+
+    - name: SetUp Python3
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install Bandit Scan
+      run: pip install bandit
+
+    - name: RUn Bandit Scan
+      run: bandit -ll -ii -r . -f json -o bandit-report.json
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: bandit-findings
+        path: bandit-report.json
+
+      
+
+    
